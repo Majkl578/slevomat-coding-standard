@@ -100,6 +100,10 @@ Requires use of null coalesce operator when possible.
 
 Requires use of early exit.
 
+#### SlevomatCodingStandard.Naming.HasMethodReturnsBooleanOnly
+
+Requires has*() methods return only booleans.
+
 ### Cleaning - detecting dead code
 
 #### SlevomatCodingStandard.Classes.UnusedPrivateElements 🚧
