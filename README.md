@@ -100,6 +100,10 @@ Requires use of null coalesce operator when possible.
 
 Requires use of early exit.
 
+#### SlevomatCodingStandard.Naming.FindMethodReturnsNull
+
+Requires find*() methods return nullables.
+
 #### SlevomatCodingStandard.Naming.GetMethodDoesNotReturnNull
 
 Requires get*() methods return only non-nullables.
