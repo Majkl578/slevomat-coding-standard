@@ -17,12 +17,12 @@ class HasMethodReturnsBooleanOnlySniffTest extends \SlevomatCodingStandard\Sniff
 		self::assertSame(7, $report->getErrorCount());
 
 		self::assertSniffError($report, 6, HasMethodReturnsBooleanOnlySniff::CODE_TYPE_NOT_SPECIFIED);
-		self::assertSniffError($report, 10, HasMethodReturnsBooleanOnlySniff::CODE_NON_BOOLEAN_ALLOWED);
-		self::assertSniffError($report, 14, HasMethodReturnsBooleanOnlySniff::CODE_NON_BOOLEAN_ALLOWED);
+		self::assertSniffError($report, 10, HasMethodReturnsBooleanOnlySniff::NULL_NOT_ALLOWED);
+		self::assertSniffError($report, 14, HasMethodReturnsBooleanOnlySniff::NULL_NOT_ALLOWED);
 		self::assertSniffError($report, 21, HasMethodReturnsBooleanOnlySniff::CODE_TYPE_NOT_SPECIFIED);
-		self::assertSniffError($report, 26, HasMethodReturnsBooleanOnlySniff::CODE_NON_BOOLEAN_ALLOWED);
-		self::assertSniffError($report, 33, HasMethodReturnsBooleanOnlySniff::CODE_NON_BOOLEAN_ALLOWED);
-		self::assertSniffError($report, 40, HasMethodReturnsBooleanOnlySniff::CODE_NON_BOOLEAN_ALLOWED);
+		self::assertSniffError($report, 26, HasMethodReturnsBooleanOnlySniff::NULL_NOT_ALLOWED);
+		self::assertSniffError($report, 33, HasMethodReturnsBooleanOnlySniff::NULL_NOT_ALLOWED);
+		self::assertSniffError($report, 40, HasMethodReturnsBooleanOnlySniff::NULL_NOT_ALLOWED);
 	}
 
 }

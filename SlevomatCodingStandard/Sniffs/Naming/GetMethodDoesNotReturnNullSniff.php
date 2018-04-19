@@ -2,12 +2,11 @@
 
 namespace SlevomatCodingStandard\Sniffs\Naming;
 
-use function preg_match;
 use SlevomatCodingStandard\Helpers\Annotation;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\ReturnTypeHint;
 
-class HasMethodReturnsBooleanOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
+class GetMethodDoesNotReturnNullSniff implements \PHP_CodeSniffer\Sniffs\Sniff
 {
 
 	public const CODE_TYPE_NOT_SPECIFIED = 'TypeNotSpecified';
@@ -32,7 +31,7 @@ class HasMethodReturnsBooleanOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			return;
 		}
 
-		if (preg_match('~^((?i)has)(?![a-z]).~', FunctionHelper::getName($phpcsFile, $pointer)) !== 1) {
+		if (preg_match('~^((?i)get)(?![a-z]).~', FunctionHelper::getName($phpcsFile, $pointer)) !== 1) {
 			return;
 		}
 
@@ -48,25 +47,16 @@ class HasMethodReturnsBooleanOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 			return;
 		}
 
-		$phpcsFile->addError(
-			sprintf('Method %s must return boolean value, but has no type specified.', FunctionHelper::getFullyQualifiedName($phpcsFile, $pointer)),
-			$pointer,
-			self::CODE_TYPE_NOT_SPECIFIED
-		);
+		$this->report($phpcsFile, $pointer, self::CODE_TYPE_NOT_SPECIFIED, 'nothing specified');
 	}
 
 	private function processTypeHint(ReturnTypeHint $returnTypeHint, \PHP_CodeSniffer\Files\File $phpcsFile, int $pointer): void
 	{
-		if ($returnTypeHint->isNullable()) {
-			$this->report($phpcsFile, $pointer, self::NULL_NOT_ALLOWED, 'null returned');
+		if (!$returnTypeHint->isNullable()) {
 			return;
 		}
 
-		if (strtolower($returnTypeHint->getTypeHint()) === 'bool') {
-			return;
-		}
-
-		$this->report($phpcsFile, $pointer, self::NULL_NOT_ALLOWED, 'non-bool returned');
+		$this->report($phpcsFile, $pointer, self::NULL_NOT_ALLOWED, 'null returned');
 	}
 
 	private function processAnnotation(Annotation $returnAnnotation, \PHP_CodeSniffer\Files\File $phpcsFile, int $pointer): void
@@ -80,23 +70,18 @@ class HasMethodReturnsBooleanOnlySniff implements \PHP_CodeSniffer\Sniffs\Sniff
 
 		$types = array_map('strtolower', explode('|', $typeDeclaration));
 
-		if (in_array('null', $types, true)) {
-			$this->report($phpcsFile, $pointer, self::NULL_NOT_ALLOWED, 'null returned');
+		if (!in_array('null', $types, true)) {
 			return;
 		}
 
-		if (count(array_diff($types, ['bool', 'boolean', 'true', 'false'])) === 0) {
-			return;
-		}
-
-		$this->report($phpcsFile, $pointer, self::NULL_NOT_ALLOWED, 'non-bool returned');
+		$this->report($phpcsFile, $pointer, self::NULL_NOT_ALLOWED, 'null returned');
 	}
 
 	private function report(\PHP_CodeSniffer\Files\File $phpcsFile, int $pointer, string $code, ?string $explanation): void
 	{
 		$phpcsFile->addError(
 			sprintf(
-				'Method %s must return non-nullable boolean value%s%s.',
+				'Method %s must return non-nullable value%s%s.',
 				FunctionHelper::getFullyQualifiedName($phpcsFile, $pointer),
 				$explanation !== null ? ', ' : '',
 				$explanation ?? ''
