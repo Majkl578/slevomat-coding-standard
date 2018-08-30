@@ -24,6 +24,7 @@ use const T_VAR;
 use const T_WHITESPACE;
 use function count;
 use function in_array;
+use function stripos;
 use function strpos;
 use function trim;
 
@@ -127,6 +128,16 @@ class DocCommentHelper
 
 		$docCommentContent = self::getDocComment($codeSnifferFile, $docCommentOpenPointer);
 		return strpos($docCommentContent, '@var') === 0;
+	}
+
+	public static function hasInheritdocAnnotation(File $phpcsFile, int $pointer): bool
+	{
+		$docComment = self::getDocComment($phpcsFile, $pointer);
+		if ($docComment === null) {
+			return false;
+		}
+
+		return stripos($docComment, '@inheritdoc') !== false;
 	}
 
 }
